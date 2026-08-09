@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Pagina de Maximo</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background-color:#f4f4f4;
+    color:#333;
+}
+
+header{
+    background-color:white;
+    padding:20px;
+    border-bottom:2px solid #ddd;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.logo h1{
+    color:#00bfff;
+    font-size:38px;
+}
+
+.logo span{
+    color:#111;
+}
+
+nav{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+}
+
+nav a{
+    text-decoration:none;
+    color:#444;
+    font-size:14px;
+    transition:0.3s;
+    font-weight:bold;
+}
+
+nav a:hover{
+    color:#00bfff;
+}
+
+.hero{
+    width:100%;
+    padding:20px;
+    background-color:#f4f4f4;
+}
+
+.hero-texto{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.hero-texto h2{
+    color:#00bfff;
+    margin-bottom:15px;
+    font-size:32px;
+}
+
+.hero-texto p{
+    max-width:800px;
+    margin:auto;
+    line-height:1.7;
+}
+
+.galeria{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    justify-content:center;
+}
+
+.galeria img{
+    width:45%;
+    height:320px;
+    object-fit:cover;
+    border-radius:12px;
+    transition:0.3s;
+    border:3px solid white;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+}
+
+.galeria img:hover{
+    transform:scale(1.02);
+}
+
+main{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+    padding:50px 0;
+}
+
+section{
+    background-color:white;
+    padding:30px;
+    margin-bottom:40px;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+section h2{
+    color:#00bfff;
+    margin-bottom:20px;
+    text-align:center;
+    font-size:32px;
+}
+
+section p{
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.flex-container{
+    display:flex;
+    gap:30px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+ul, ol{
+    background-color:#f7f7f7;
+    padding:25px;
+    border-radius:10px;
+    width:300px;
+    border:1px solid #ccc;
+}
+
+li{
+    margin-bottom:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+}
+
+th{
+    background-color:#111;
+    color:#00bfff;
+}
+
+th, td{
+    border:1px solid #ccc;
+    padding:15px;
+    text-align:center;
+}
+
+tr:nth-child(even){
+    background-color:#f2f2f2;
+}
+
+#contacto{
+    background-color:#111;
+    color:white;
+}
+
+.info-contacto{
+    background-color:#1c1c1c;
+    border:2px solid #00bfff;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:25px;
+}
+
+.info-contacto p{
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+.whatsapp{
+    color:#00ff99;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.whatsapp:hover{
+    color:#ffffff;
+}
+
+form{
+    width:100%;
+    max-width:500px;
+    margin:auto;
+}
+
+input, textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border-radius:6px;
+    border:1px solid #bbb;
+    font-size:15px;
+}
+
+textarea{
+    resize:none;
+    min-height:140px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:6px;
+    background-color:#00bfff;
+    color:black;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background-color:#0099cc;
+}
+
+#mensaje{
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+#contador{
+    text-align:right;
+    margin-bottom:10px;
+    color:#ccc;
+}
+
+footer{
+    background-color:#111;
+    color:#00bfff;
+    text-align:center;
+    padding:20px;
+    margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <h1>BIENVENIDOS A LA PAGINA DE: <span>MAXI</span></h1>
+    </div>
+
+    <nav>
+        <a href="#sobre-mi">CONOCER</a>
+        <a href="#habilidades">HABILIDADES</a>
+        <a href="#contacto">CONTACTAR</a>
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-texto">
+
+        <h2>Mi galería personal</h2>
+
+        <p>
+            En esta seccion podes ver fotos mias haciendo lo que me gusta.
+        </p>
+
+    </div>
+
+    <div class="galeria">
+
+        <img src="/media/fotoCABenJ.jpg" alt="Foto con amigos">
+
+        <img src="/media/GuisoenJ.jpg" alt="Cocinando">
+
+        <img src="/media/futbolenJ.jpg" alt="Jugando futbol">
+
+        <img src="/media/jardinJ.jpg" alt="Actividad solidaria">
+
+    </div>
+
+</section>
+
+<main>
+
+    <section id="sobre-mi">
+
+        <h2>Quien soy</h2>
+
+        <p>
+            Soy Maximo Corallo Margosian y nací el 01/08/2008.
+            Soy alumno del colegio secundario "Instituto Tecnico Salesiano Villada", voy a la especialidad de programación y actualmente estoy en 6to año.
+            También estudio inglés en una academia la cual estoy finalizando este año.
+        </p>
+
+        <p>
+            Disfruto actividades como cocinar, donde comidas como el asado, los guisos y las papas fritas me quedan espectaculares.
+            Básicamente soy una persona simple, que le gusta el humor, Belgrano y estar rodeado de amigos.
+        </p>
+
+    </section>
+
+    <section id="habilidades">
+
+        <h2>Habilidades y gustos</h2>
+
+        <p>
+            Estas son habilidades que fui desarrollando en mi vida y también actividades que disfruto hacer.
+        </p>
+
+        <div class="flex-container">
+
+            <ul>
+                <li>Inglés</li>
+                <li>RCP</li>
+                <li>Manejo</li>
+                <li>Preparacion de bebidas</li>
+            </ul>
+
+            <ol>
+                <li>Fútbol</li>
+                <li>Música en general</li>
+                <li>Cocinar</li>
+                <li>Humor</li>
+            </ol>
+
+        </div>
+
+    </section>
+
+    <section id="tabla-section">
+
+        <h2>Tabla de habilidades</h2>
+
+        <p>
+            En esta tabla podes ver actividades que me desempeño y el nivel que tengo en cada una.
+        </p>
+
+        <table id="tabla">
+
+            <tr>
+                <th>Actividad</th>
+                <th>Nivel</th>
+            </tr>
+
+            <tr>
+                <td>Inglés</td>
+                <td>B2+</td>
+            </tr>
+
+            <tr>
+                <td>RCP</td>
+                <td>Calificado</td>
+            </tr>
+
+            <tr>
+                <td>Fútbol</td>
+                <td>Categoría Plata 2008</td>
+            </tr>
+
+        </table>
+
+    </section>
+
+    <section id="contacto">
+
+        <h2>Contacto</h2>
+
+        <p>
+            Si querés comunicarte conmigo, podés hacerlo mediante el siguiente formulario o directamente desde WhatsApp.
+        </p>
+
+        <div class="info-contacto">
+
+            <p>📍 Algun lugar de Córdoba, Argentina</p>
+
+            <p>📧 m.corallo.margosian@itsv.edu.ar</p>
+
+
+            <p>
+                💬
+                <a href="https://wa.me/5493512322509" target="_blank" class="whatsapp">
+                    Comunicarse por WhatsApp
+                </a>
+            </p>
+
+        </div>
+
+        <form id="formulario">
+
+            <input type="text" id="nombre" placeholder="Nombre">
+
+            <input type="email" id="email" placeholder="Email">
+
+            <div id="contador">
+                Caracteres: 0
+            </div>
+
+            <textarea id="mensajeTexto" placeholder="Escribí tu mensaje"></textarea>
+
+            <button type="submit">
+                Enviar mensaje
+            </button>
+
+        </form>
+
+        <p id="mensaje"></p>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <p>
+        © 2026 - Derechos de COPYRIGHT del estimado Corallo Margosian
+    </p>
+
+</footer>
+
+<script>
+
+const formulario = document.getElementById("formulario");
+const mensaje = document.getElementById("mensaje");
+
+formulario.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombre").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const texto = document.getElementById("mensajeTexto").value.trim();
+
+    if(nombre === "" || email === "" || texto === ""){
+
+        mensaje.textContent = "Por favor completá todos los campos.";
+        mensaje.style.color = "red";
+
+    }else{
+
+        mensaje.textContent = "Formulario enviado correctamente.";
+        mensaje.style.color = "#00ff99";
+
+        formulario.reset();
+
+        contador.textContent = "Caracteres: 0";
+    }
+
+});
+
+const filas = document.querySelectorAll("#tabla tr");
+
+filas.forEach(fila => {
+
+    fila.addEventListener("mouseover", function(){
+        fila.style.backgroundColor = "#b3ecff";
+    });
+
+    fila.addEventListener("mouseout", function(){
+        fila.style.backgroundColor = "";
+    });
+
+});
+
+const textarea = document.getElementById("mensajeTexto");
+const contador = document.getElementById("contador");
+
+textarea.addEventListener("input", function(){
+
+    contador.textContent = "Caracteres: " + textarea.value.length;
+
+});
+
+</script>
+
+</body>
+</html>
