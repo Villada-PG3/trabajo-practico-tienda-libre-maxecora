@@ -4,12 +4,12 @@ from .models import Producto, Categoria
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'mostrar_miniatura')
+    list_display = ('nombre', 'precio', 'marca', 'stock', 'mostrar_miniatura')
     readonly_fields = ('mostrar_imagen_detalle',)
 
     def mostrar_miniatura(self, obj):
         if obj.imagen:
-            return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover;" />', obj.imagen.url)
+            return format_html('<img src="{}" style="width: 100px; height: 100px; object-fit: cover;" />', obj.imagen.url)
         return "No hay imagen"
 
     mostrar_miniatura.short_description = 'Miniatura'

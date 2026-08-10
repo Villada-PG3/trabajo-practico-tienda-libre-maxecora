@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Libre</title>
-</head>
-<body>
-    <h1>Bienvenido a la tienda Libre desde donde se hace el render</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="text-center mb-4">Bienvenido a Tienda Libre</h1>
+        <div class="text-center mt-4">
+            <a href="{% url 'tiendalibre:acerca-de-mi' %}" class="btn btn-primary btn-lg">Acerca de mí</a>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'admin:index' %}" class="btn btn-secondary btn-lg">Ver Productos (Admin)</a>
+        </div>
+    </div>
+{% endblock %}
