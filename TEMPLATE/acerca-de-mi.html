@@ -1,64 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
+{% block title %}Acerca de mí | Tienda Libre{% endblock %}
 
-<meta charset="UTF-8">
-
-<title>Pagina de Maximo</title>
-
+{% block extra_head %}
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, sans-serif;
-    background-color:#f4f4f4;
-    color:#333;
-}
-
-header{
-    background-color:white;
-    padding:20px;
-    border-bottom:2px solid #ddd;
-}
-
-.logo{
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.logo h1{
-    color:#00bfff;
-    font-size:38px;
-}
-
-.logo span{
-    color:#111;
-}
-
-nav{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-}
-
-nav a{
-    text-decoration:none;
-    color:#444;
-    font-size:14px;
-    transition:0.3s;
-    font-weight:bold;
-}
-
-nav a:hover{
-    color:#00bfff;
-}
-
 .hero{
     width:100%;
     padding:20px;
@@ -103,19 +48,11 @@ nav a:hover{
     transform:scale(1.02);
 }
 
-main{
-    width:90%;
-    max-width:1100px;
-    margin:auto;
-    padding:50px 0;
-}
-
 section{
-    background-color:white;
+    background-color:transparent;
     padding:30px;
     margin-bottom:40px;
-    border-radius:10px;
-    border:1px solid #ddd;
+    border:0;
 }
 
 section h2{
@@ -257,24 +194,9 @@ footer{
 }
 
 </style>
+{% endblock %}
 
-</head>
-
-<body>
-
-<header>
-
-    <div class="logo">
-        <h1>BIENVENIDOS A LA PAGINA DE: <span>MAXI</span></h1>
-    </div>
-
-    <nav>
-        <a href="#sobre-mi">CONOCER</a>
-        <a href="#habilidades">HABILIDADES</a>
-        <a href="#contacto">CONTACTAR</a>
-    </nav>
-
-</header>
+{% block content %}
 
 <section class="hero">
 
@@ -301,8 +223,6 @@ footer{
     </div>
 
 </section>
-
-<main>
 
     <section id="sobre-mi">
 
@@ -429,8 +349,6 @@ footer{
 
     </section>
 
-</main>
-
 <footer>
 
     <p>
@@ -493,6 +411,4 @@ textarea.addEventListener("input", function(){
 });
 
 </script>
-
-</body>
-</html>
+{% endblock %}
