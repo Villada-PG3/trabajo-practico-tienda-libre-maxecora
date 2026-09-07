@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ producto.nombre }} - Tienda Libre{% endblock %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'tiendalibre:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'tiendalibre:catalogo' %}">Catálogo</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">{{ producto.nombre }}</h1>
+        </div>
+
+        <div class="col-12 col-md-6 mb-4">
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}">
+            {% else %}
+                <p class="text-center">No hay imagen disponible.</p>
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-md-6">
+            <h2>Detalles del producto</h2>
+            <p><strong>Descripción:</strong> {{ producto.descripcion|default:"Sin descripción" }}</p>
+            <p><strong>Categoría:</strong> {{ producto.categoria.nombre|default:"Sin categoría" }}</p>
+            <p><strong>Marca:</strong> {{ producto.marca|default:"Sin marca" }}</p>
+            <p><strong>Precio:</strong> {% if producto.precio %}${{ producto.precio }}{% else %}Sin precio{% endif %}</p>
+            <p><strong>Stock:</strong> 
+                {% if producto.stock > 0 %}
+                    Disponible ({{ producto.stock }})
+                {% else %}
+                    No disponible
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

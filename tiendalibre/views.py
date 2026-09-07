@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 # Create your views here.
 from django.views.generic import TemplateView
@@ -34,3 +34,11 @@ def catalogo(request):
 
 def acerca_de_mi(request):
     return render(request, 'acerca-de-mi.html')
+
+def detalle_producto(request, pk):
+    producto = get_object_or_404(
+        Producto.objects.select_related('categoria'),
+        pk=pk,
+    )
+    context = {'producto': producto,}
+    return render(request, 'detalle.html', context)

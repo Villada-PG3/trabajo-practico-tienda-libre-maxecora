@@ -14,7 +14,12 @@
                         <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 180px; object-fit: contain; padding: 10px;">
                     {% endif %}
                     <div class="card-body">
-                        <h2 class="card-title h5">{{ producto.nombre }}</h2>
+                        <h5 class="card-title h5">
+                            <a href="{% url 'tiendalibre:detalle_producto' producto.pk %}"
+                            class="text-decoration-none">
+                                {{ producto.nombre }}
+                            </a>
+                        </h5>
                         <p class="card-text mb-2"><strong>Descripción:</strong> {{ producto.descripcion|truncatewords:40 }}</p>
                         <p class="card-text mb-2"><strong>Categoría:</strong> {{ producto.categoria.nombre|default:"Sin categoría" }}</p>
                         <p class="card-text mb-2"><strong>Marca:</strong> {{ producto.marca }}</p>
@@ -34,8 +39,13 @@
                             {% endif %}
                         </p>
                     </div>
+                <a href="{% url 'tiendalibre:detalle_producto' producto.pk %}" class="btn btn-primary mt-2">
+            Ver detalles
+        </a>
                 </article>
             </div>
+        
+
         {% empty %}
             <div class="col-12">
                 <p class="alert alert-warning text-center">No hay productos cargados.</p>
