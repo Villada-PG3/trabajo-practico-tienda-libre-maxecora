@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo | Tienda Libre{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Catálogo de productos</h1>
+        </div>
+
+        {% for producto in productos %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <article class="card h-100 shadow-sm">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 180px; object-fit: contain; padding: 10px;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h2 class="card-title h5">{{ producto.nombre }}</h2>
+                        <p class="card-text mb-2"><strong>Descripción:</strong> {{ producto.descripcion|truncatewords:40 }}</p>
+                        <p class="card-text mb-2"><strong>Categoría:</strong> {{ producto.categoria.nombre|default:"Sin categoría" }}</p>
+                        <p class="card-text mb-2"><strong>Marca:</strong> {{ producto.marca }}</p>
+                        <p class="card-title fs-4 fw-bold text-primary" title="Precio del producto">
+                            {% if producto.precio %}${{ producto.precio }}{% else %}Sin precio{% endif %}
+                        </p>
+                        <p class="card-text mb-0 d-flex align-items-center gap-2">
+                            <strong>Stock:</strong>
+                            {% if producto.stock > 0 %}
+                                <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success text-white" style="width: 2rem; height: 2rem;" title="Stock disponible">
+                                    {{ producto.stock }}
+                                </span>
+                            {% else %}
+                                <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger text-white" style="width: 2rem; height: 2rem;" title="Sin stock">
+                                    {{ producto.stock }}
+                                </span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </article>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="alert alert-warning text-center">No hay productos cargados.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

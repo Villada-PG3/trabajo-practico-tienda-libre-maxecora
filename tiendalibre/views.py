@@ -21,12 +21,16 @@ def home(request):
     ]
 
     contexto = {
-        'productos': Producto.objects.all(), 
         'productos_destacados': productos_destacados,
+        'productos_recientes': Producto.objects.select_related('categoria').order_by('-fecha_creacion', '-id')[:3],
         'titulo': 'Tienda Libre',
         'esta_logueado': True, #False muestra un mensaje que se necesita estar logueado
     }
     return render(request, 'home.html', contexto)
+
+def catalogo(request):
+    productos = Producto.objects.select_related('categoria').all()
+    return render(request, 'catalogo.html', {'productos': productos})
 
 def acerca_de_mi(request):
     return render(request, 'acerca-de-mi.html')
