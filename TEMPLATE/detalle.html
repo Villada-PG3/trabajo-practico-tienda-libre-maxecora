@@ -3,13 +3,6 @@
 {% block title %}{{ producto.nombre }} - Tienda Libre{% endblock %}
 
 {% block content %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'tiendalibre:home' %}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'tiendalibre:catalogo' %}">Catálogo</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
-        </ol>
-    </nav>
 
     <div class="row">
         <div class="col-12">
@@ -18,9 +11,11 @@
 
         <div class="col-12 col-md-6 mb-4">
             {% if producto.imagen %}
-                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}">
+                <div class="detail-image-frame">
+                    <img src="{{ producto.imagen.url }}" class="img-fluid detail-image" alt="{{ producto.nombre }}">
+                </div>
             {% else %}
-                <p class="text-center">No hay imagen disponible.</p>
+                <div class="product-image-placeholder detail-image-placeholder">No hay imagen disponible.</div>
             {% endif %}
         </div>
 

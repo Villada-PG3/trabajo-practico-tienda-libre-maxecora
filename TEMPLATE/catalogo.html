@@ -9,10 +9,14 @@
 
         {% for producto in productos %}
             <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <article class="card h-100 shadow-sm">
-                    {% if producto.imagen %}
-                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 180px; object-fit: contain; padding: 10px;">
-                    {% endif %}
+                <article class="card product-card h-100 shadow-sm">
+                    <div class="product-image-frame">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" class="card-img-top product-image" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <div class="product-image-placeholder">Imagen no disponible</div>
+                        {% endif %}
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title h5">
                             <a href="{% url 'tiendalibre:detalle_producto' producto.pk %}"
