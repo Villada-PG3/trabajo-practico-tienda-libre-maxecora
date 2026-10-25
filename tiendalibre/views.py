@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
-from django.views.generic import ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 from .models import Producto
 
 class TiendaTemplateView(TemplateView):
@@ -34,17 +34,24 @@ class CatalogoView(ListView):
     template_name = 'catalogo.html'
     context_object_name = 'productos'
     queryset = Producto.objects.select_related('categoria').all()
+    paginate_by = 6
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_range'] = context['paginator'].get_elided_page_range(
+            context['page_obj'].number
+        )
+        return context
+
+
+class DetalleProductoView(DetailView):
+    model = Producto
+    template_name = 'detalle.html'
+    context_object_name = 'producto'
+    queryset = Producto.objects.select_related('categoria')
 
 def home_1(request):
     return HttpResponse("<h1>Bienvenido a la tienda Libre de Maximo Corallo Margosian</h1>")
 
 def acerca_de_mi(request):
     return render(request, 'acerca-de-mi.html')
-
-def detalle_producto(request, pk):
-    producto = get_object_or_404(
-        Producto.objects.select_related('categoria'),
-        pk=pk,
-    )
-    context = {'producto': producto,}
-    return render(request, 'detalle.html', context)
