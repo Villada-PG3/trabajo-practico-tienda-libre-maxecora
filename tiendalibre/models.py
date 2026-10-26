@@ -1,9 +1,10 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length= 100, unique=True)
-    #slug = models.SlugField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
 
     class Meta:
         verbose_name = 'categoria'
@@ -12,6 +13,19 @@ class Categoria(models.Model):
 # Create your models here.
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug_base = slugify(self.nombre)[:100] or 'categoria'
+            self.slug = slug_base
+            suffix = 2
+            while Categoria.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+                suffix_text = f'-{suffix}'
+                self.slug = f'{slug_base[:100 - len(suffix_text)]}{suffix_text}'
+                suffix += 1
+        super().save(*args, **kwargs)
+
+
 class Producto(models.Model):
     categoria = models.ForeignKey(
         Categoria, 

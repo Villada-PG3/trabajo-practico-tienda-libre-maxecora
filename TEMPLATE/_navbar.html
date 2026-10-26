@@ -8,6 +8,18 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'tiendalibre:home' %}">Inicio</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'tiendalibre:catalogo' %}">Catálogo</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorías
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for categoria in categorias %}
+                            <li><a class="dropdown-item" href="{% url 'tiendalibre:categoria' categoria.slug %}">{{ categoria.nombre }}</a></li>
+                        {% empty %}
+                            <li><span class="dropdown-item-text">No hay categorías</span></li>
+                        {% endfor %}
+                    </ul>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'tiendalibre:acerca-de-mi' %}">Acerca de mí</a></li>
             </ul>
         </div>

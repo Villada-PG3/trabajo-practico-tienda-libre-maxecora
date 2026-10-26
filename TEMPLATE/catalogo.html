@@ -2,6 +2,14 @@
 {% block title %}Catálogo | Tienda Libre{% endblock %}
 
 {% block content %}
+    <form method="get" class="mb-4" role="search">
+        <label class="form-label" for="catalogo-search">Buscar productos</label>
+        <div class="input-group">
+            <input id="catalogo-search" type="search" name="q" class="form-control" value="{{ request.GET.q }}" placeholder="Nombre, marca o descripción">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+    </form>
+
     <div class="row">
         <div class="col-12">
             <h1 class="text-center mb-4">Catálogo de productos</h1>
@@ -62,7 +70,7 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Página anterior">Anterior</a>
+                        <a class="page-link" href="{% querystring page=page_obj.previous_page_number %}" aria-label="Página anterior">Anterior</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
@@ -79,14 +87,14 @@
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                            <a class="page-link" href="{% querystring page=page_number %}">{{ page_number }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Página siguiente">Siguiente</a>
+                        <a class="page-link" href="{% querystring page=page_obj.next_page_number %}" aria-label="Página siguiente">Siguiente</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">

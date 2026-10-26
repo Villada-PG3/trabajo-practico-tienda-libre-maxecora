@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}{{ categoria.nombre }} | Tienda Libre{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Productos de {{ categoria.nombre }}</h1>
+        </div>
+
+        {% for producto in productos %}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <article class="card product-card h-100 shadow-sm">
+                    <div class="product-image-frame">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" class="card-img-top product-image" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <div class="product-image-placeholder">Imagen no disponible</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title h5">
+                            <a href="{% url 'tiendalibre:detalle_producto' producto.pk %}" class="text-decoration-none">
+                                {{ producto.nombre }}
+                            </a>
+                        </h2>
+                        <p class="card-text mb-2"><strong>Descripción:</strong> {{ producto.descripcion|truncatewords:40 }}</p>
+                        <p class="card-text mb-2"><strong>Marca:</strong> {{ producto.marca }}</p>
+                        <p class="card-title fs-4 fw-bold text-primary">
+                            {% if producto.precio %}${{ producto.precio }}{% else %}Sin precio{% endif %}
+                        </p>
+                        <p class="card-text mb-0"><strong>Stock:</strong> {{ producto.stock }}</p>
+                    </div>
+                    <a href="{% url 'tiendalibre:detalle_producto' producto.pk %}" class="btn btn-primary mt-2">
+                        Ver detalles
+                    </a>
+                </article>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="alert alert-warning text-center">No hay productos en esta categoría.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        <nav aria-label="Paginación de productos por categoría">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% querystring page=page_obj.previous_page_number %}" aria-label="Página anterior">Anterior</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                {% endif %}
+                {% for page_number in page_range %}
+                    {% if page_number == paginator.ELLIPSIS %}
+                        <li class="page-item disabled"><span class="page-link">{{ page_number }}</span></li>
+                    {% elif page_number == page_obj.number %}
+                        <li class="page-item active" aria-current="page"><span class="page-link">{{ page_number }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="{% querystring page=page_number %}">{{ page_number }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% querystring page=page_obj.next_page_number %}" aria-label="Página siguiente">Siguiente</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 # Create your views here.
 from django.views.generic import DetailView, ListView, TemplateView
-from .models import Producto
+from django.db.models import Q
+from .models import Categoria, Producto
 
 class TiendaTemplateView(TemplateView):
     template_name = 'tienda.html'
@@ -33,14 +34,45 @@ class CatalogoView(ListView):
     model = Producto
     template_name = 'catalogo.html'
     context_object_name = 'productos'
-    queryset = Producto.objects.select_related('categoria').all()
     paginate_by = 6
+
+    def get_queryset(self):
+        queryset = Producto.objects.select_related('categoria').all()
+        query = self.request.GET.get('q', '').strip()
+        if query:
+            queryset = queryset.filter(
+                Q(nombre__icontains=query)
+                | Q(marca__icontains=query)
+                | Q(descripcion__icontains=query)
+            )
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_range'] = context['paginator'].get_elided_page_range(
-            context['page_obj'].number
-        )
+        if context['is_paginated']:
+            context['page_range'] = context['paginator'].get_elided_page_range(
+                context['page_obj'].number
+            )
+        return context
+
+
+class CategoriaView(ListView):
+    model = Producto
+    template_name = 'tiendalibre/categoria.html'
+    context_object_name = 'productos'
+    paginate_by = 6
+
+    def get_queryset(self):
+        self.categoria = get_object_or_404(Categoria, slug=self.kwargs['slug'])
+        return Producto.objects.filter(categoria=self.categoria).select_related('categoria')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categoria'] = self.categoria
+        if context['is_paginated']:
+            context['page_range'] = context['paginator'].get_elided_page_range(
+                context['page_obj'].number
+            )
         return context
 
 
