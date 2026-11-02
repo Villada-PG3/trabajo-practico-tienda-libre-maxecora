@@ -12,7 +12,10 @@
 
     <div class="row">
         <div class="col-12">
-            <h1 class="text-center mb-4">Catálogo de productos</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Catálogo de productos</h1>
+                <a href="{% url 'tiendalibre:producto_crear' %}" class="btn btn-success">Crear producto</a>
+            </div>
         </div>
 
         {% for producto in productos %}

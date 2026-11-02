@@ -83,6 +83,60 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.context['producto'], producto)
         self.assertContains(response, producto.nombre)
 
+    def test_producto_crud_cycle(self):
+        create_url = reverse('tiendalibre:producto_crear')
+        create_response = self.client.post(
+            create_url,
+            {
+                'nombre': 'Producto CRUD',
+                'descripcion': 'Descripción de prueba',
+                'precio': '25.50',
+                'stock': 4,
+                'marca': 'Marca CRUD',
+                'activo': True,
+            },
+        )
+
+        self.assertRedirects(create_response, reverse('tiendalibre:catalogo'))
+        producto = Producto.objects.get(nombre='Producto CRUD')
+
+        update_response = self.client.post(
+            reverse('tiendalibre:producto_editar', args=[producto.pk]),
+            {
+                'nombre': 'Producto CRUD editado',
+                'descripcion': 'Descripción actualizada',
+                'precio': '30.00',
+                'stock': 5,
+                'marca': 'Marca CRUD',
+                'activo': True,
+            },
+        )
+        self.assertRedirects(update_response, reverse('tiendalibre:catalogo'))
+        producto.refresh_from_db()
+        self.assertEqual(producto.nombre, 'Producto CRUD editado')
+
+        detail_response = self.client.get(
+            reverse('tiendalibre:detalle_producto', args=[producto.pk])
+        )
+        self.assertEqual(detail_response.status_code, 200)
+        self.assertContains(detail_response, producto.nombre)
+        self.assertContains(detail_response, reverse('tiendalibre:producto_editar', args=[producto.pk]))
+        self.assertContains(detail_response, reverse('tiendalibre:producto_eliminar', args=[producto.pk]))
+
+        delete_url = reverse('tiendalibre:producto_eliminar', args=[producto.pk])
+        confirmation_response = self.client.get(delete_url)
+        self.assertEqual(confirmation_response.status_code, 200)
+        self.assertTemplateUsed(
+            confirmation_response,
+            'tiendalibre/producto_confirm_delete.html',
+        )
+        self.assertContains(confirmation_response, 'Confirmar eliminación')
+        self.assertTrue(Producto.objects.filter(pk=producto.pk).exists())
+
+        delete_response = self.client.post(delete_url)
+        self.assertRedirects(delete_response, reverse('tiendalibre:catalogo'))
+        self.assertFalse(Producto.objects.filter(pk=producto.pk).exists())
+
     def test_catalogo_search_matches_name_brand_and_description(self):
         matches = [
             Producto.objects.create(

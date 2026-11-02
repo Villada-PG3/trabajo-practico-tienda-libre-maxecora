@@ -32,6 +32,10 @@
                     No disponible
                 {% endif %}
             </p>
+            <div class="d-flex gap-2">
+                <a href="{% url 'tiendalibre:producto_editar' producto.pk %}" class="btn btn-primary">Editar</a>
+                <a href="{% url 'tiendalibre:producto_eliminar' producto.pk %}" class="btn btn-danger">Eliminar</a>
+            </div>
         </div>
     </div>
 {% endblock %}
