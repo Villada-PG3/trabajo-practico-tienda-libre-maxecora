@@ -2,8 +2,9 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 # Create your views here.
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, TemplateView, UpdateView
 from django.db.models import Q
 from .models import Categoria, Producto
 
@@ -82,7 +83,17 @@ class DetalleProductoView(DetailView):
     model = Producto
     template_name = 'detalle.html'
     context_object_name = 'producto'
-    queryset = Producto.objects.select_related('categoria')
+    queryset = Producto.objects.select_related('categoria', 'creado_por')
+
+
+class RegistroView(FormView):
+    form_class = UserCreationForm
+    template_name = 'registration/registro.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 
 class ProductoCreateView(LoginRequiredMixin, CreateView):
@@ -91,6 +102,10 @@ class ProductoCreateView(LoginRequiredMixin, CreateView):
     template_name = 'tiendalibre/producto_form.html'
     success_url = reverse_lazy('tiendalibre:catalogo')
 
+    def form_valid(self, form):
+        form.instance.creado_por = self.request.user
+        return super().form_valid(form)
+
 
 class ProductoUpdateView(LoginRequiredMixin, UpdateView):
     model = Producto
@@ -98,11 +113,23 @@ class ProductoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'tiendalibre/producto_form.html'
     success_url = reverse_lazy('tiendalibre:catalogo')
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(creado_por=self.request.user)
+
 
 class ProductoDeleteView(LoginRequiredMixin, DeleteView):
     model = Producto
     template_name = 'tiendalibre/producto_confirm_delete.html'
     success_url = reverse_lazy('tiendalibre:catalogo')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_superuser:
+            return queryset
+        return queryset.filter(creado_por=self.request.user)
 
 
 def home_1(request):

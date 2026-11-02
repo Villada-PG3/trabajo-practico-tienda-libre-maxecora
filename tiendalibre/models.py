@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 
 
@@ -40,6 +41,13 @@ class Producto(models.Model):
     stock = models.PositiveIntegerField()
     marca = models.CharField(max_length=100, default='Marca Desconocida')
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
+    creado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='productos_creados',
+    )
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)
     class Meta:

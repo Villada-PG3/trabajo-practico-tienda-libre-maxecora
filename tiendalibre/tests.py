@@ -102,6 +102,7 @@ class CatalogoViewsTests(TestCase):
 
         self.assertRedirects(create_response, reverse('tiendalibre:catalogo'))
         producto = Producto.objects.get(nombre='Producto CRUD')
+        self.assertEqual(producto.creado_por, user)
 
         update_response = self.client.post(
             reverse('tiendalibre:producto_editar', args=[producto.pk]),
@@ -123,6 +124,7 @@ class CatalogoViewsTests(TestCase):
         )
         self.assertEqual(detail_response.status_code, 200)
         self.assertContains(detail_response, producto.nombre)
+        self.assertContains(detail_response, user.username)
         self.assertContains(detail_response, reverse('tiendalibre:producto_editar', args=[producto.pk]))
         self.assertContains(detail_response, reverse('tiendalibre:producto_eliminar', args=[producto.pk]))
 
@@ -207,6 +209,55 @@ class CatalogoViewsTests(TestCase):
             logged_out_detail_response,
             reverse('tiendalibre:producto_eliminar', args=[producto.pk]),
         )
+
+    def test_registration_creates_user_and_links_to_login(self):
+        registration_url = reverse('tiendalibre:registro')
+        login_page = self.client.get(reverse('login'))
+        self.assertContains(login_page, registration_url)
+
+        response = self.client.post(
+            registration_url,
+            {
+                'username': 'nuevo_usuario',
+                'password1': 'A-strong-password-123!',
+                'password2': 'A-strong-password-123!',
+            },
+        )
+
+        self.assertRedirects(response, reverse('login'))
+        self.assertTrue(User.objects.filter(username='nuevo_usuario').exists())
+
+    def test_only_creator_or_superuser_can_edit_or_delete_product(self):
+        creator = User.objects.create_user(username='creador', password='creator-password')
+        otro_usuario = User.objects.create_user(username='otro', password='other-password')
+        producto = Producto.objects.create(
+            creado_por=creator,
+            nombre='Producto de creador',
+            descripcion='Descripción de prueba',
+            stock=3,
+        )
+        edit_url = reverse('tiendalibre:producto_editar', args=[producto.pk])
+        delete_url = reverse('tiendalibre:producto_eliminar', args=[producto.pk])
+        detail_url = reverse('tiendalibre:detalle_producto', args=[producto.pk])
+
+        self.client.force_login(otro_usuario)
+        self.assertEqual(self.client.get(edit_url).status_code, 404)
+        self.assertEqual(self.client.get(delete_url).status_code, 404)
+        self.assertNotContains(self.client.get(detail_url), edit_url)
+        self.assertNotContains(self.client.get(detail_url), delete_url)
+
+        self.client.force_login(creator)
+        self.assertEqual(self.client.get(edit_url).status_code, 200)
+        self.assertEqual(self.client.get(delete_url).status_code, 200)
+
+        admin = User.objects.create_superuser(
+            username='administrador',
+            email='admin@example.com',
+            password='admin-password',
+        )
+        self.client.force_login(admin)
+        self.assertEqual(self.client.get(edit_url).status_code, 200)
+        self.assertEqual(self.client.get(delete_url).status_code, 200)
 
     def test_catalogo_search_matches_name_brand_and_description(self):
         matches = [

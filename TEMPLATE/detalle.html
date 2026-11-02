@@ -23,6 +23,7 @@
             <h2>Detalles del producto</h2>
             <p><strong>Descripción:</strong> {{ producto.descripcion|default:"Sin descripción" }}</p>
             <p><strong>Categoría:</strong> {{ producto.categoria.nombre|default:"Sin categoría" }}</p>
+            <p><strong>Creado por:</strong> {{ producto.creado_por.username|default:"No especificado" }}</p>
             <p><strong>Marca:</strong> {{ producto.marca|default:"Sin marca" }}</p>
             <p><strong>Precio:</strong> {% if producto.precio %}${{ producto.precio }}{% else %}Sin precio{% endif %}</p>
             <p><strong>Stock:</strong> 
@@ -32,7 +33,7 @@
                     No disponible
                 {% endif %}
             </p>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.is_superuser or user.is_authenticated and producto.creado_por_id == user.id %}
                 <div class="d-flex gap-2">
                     <a href="{% url 'tiendalibre:producto_editar' producto.pk %}" class="btn btn-primary">Editar</a>
                     <a href="{% url 'tiendalibre:producto_eliminar' producto.pk %}" class="btn btn-danger">Eliminar</a>
