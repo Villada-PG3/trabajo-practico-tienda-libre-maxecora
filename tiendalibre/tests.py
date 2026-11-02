@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from .models import Categoria, Producto
@@ -84,6 +85,8 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, producto.nombre)
 
     def test_producto_crud_cycle(self):
+        user = User.objects.create_user(username='editor', password='test-password')
+        self.client.force_login(user)
         create_url = reverse('tiendalibre:producto_crear')
         create_response = self.client.post(
             create_url,
@@ -136,6 +139,74 @@ class CatalogoViewsTests(TestCase):
         delete_response = self.client.post(delete_url)
         self.assertRedirects(delete_response, reverse('tiendalibre:catalogo'))
         self.assertFalse(Producto.objects.filter(pk=producto.pk).exists())
+
+    def test_authentication_protects_crud_and_controls_user_actions(self):
+        producto = Producto.objects.create(
+            nombre='Producto protegido',
+            descripcion='Descripción de prueba',
+            stock=3,
+        )
+        create_url = reverse('tiendalibre:producto_crear')
+
+        response = self.client.get(create_url)
+        self.assertRedirects(
+            response,
+            f'{reverse("login")}?next={create_url}',
+        )
+        login_page = self.client.get(reverse('login'))
+        self.assertTemplateUsed(login_page, 'registration/login.html')
+
+        detail_url = reverse('tiendalibre:detalle_producto', args=[producto.pk])
+        detail_response = self.client.get(detail_url)
+        self.assertNotContains(detail_response, reverse('tiendalibre:producto_editar', args=[producto.pk]))
+        self.assertNotContains(detail_response, reverse('tiendalibre:producto_eliminar', args=[producto.pk]))
+        catalog_response = self.client.get(reverse('tiendalibre:catalogo'))
+        self.assertNotContains(catalog_response, create_url)
+
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@example.com',
+            password='admin-password',
+        )
+        login_response = self.client.post(
+            reverse('login'),
+            {'username': 'admin', 'password': 'admin-password', 'next': create_url},
+        )
+        self.assertRedirects(login_response, create_url)
+
+        create_response = self.client.post(
+            create_url,
+            {
+                'nombre': 'Producto creado por admin',
+                'descripcion': 'Descripción de prueba',
+                'stock': 2,
+                'marca': 'Marca de prueba',
+            },
+        )
+        self.assertRedirects(create_response, reverse('tiendalibre:catalogo'))
+        self.assertTrue(Producto.objects.filter(nombre='Producto creado por admin').exists())
+
+        authenticated_detail_response = self.client.get(detail_url)
+        self.assertContains(
+            authenticated_detail_response,
+            reverse('tiendalibre:producto_editar', args=[producto.pk]),
+        )
+        self.assertContains(
+            authenticated_detail_response,
+            reverse('tiendalibre:producto_eliminar', args=[producto.pk]),
+        )
+
+        logout_response = self.client.post(reverse('logout'))
+        self.assertRedirects(logout_response, '/')
+        logged_out_detail_response = self.client.get(detail_url)
+        self.assertNotContains(
+            logged_out_detail_response,
+            reverse('tiendalibre:producto_editar', args=[producto.pk]),
+        )
+        self.assertNotContains(
+            logged_out_detail_response,
+            reverse('tiendalibre:producto_eliminar', args=[producto.pk]),
+        )
 
     def test_catalogo_search_matches_name_brand_and_description(self):
         matches = [

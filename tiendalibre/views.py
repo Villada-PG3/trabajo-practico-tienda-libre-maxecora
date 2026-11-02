@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 # Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 from django.db.models import Q
 from .models import Categoria, Producto
@@ -84,21 +85,21 @@ class DetalleProductoView(DetailView):
     queryset = Producto.objects.select_related('categoria')
 
 
-class ProductoCreateView(CreateView):
+class ProductoCreateView(LoginRequiredMixin, CreateView):
     model = Producto
     fields = ('categoria', 'nombre', 'descripcion', 'precio', 'stock', 'marca', 'imagen', 'activo')
     template_name = 'tiendalibre/producto_form.html'
     success_url = reverse_lazy('tiendalibre:catalogo')
 
 
-class ProductoUpdateView(UpdateView):
+class ProductoUpdateView(LoginRequiredMixin, UpdateView):
     model = Producto
     fields = ('categoria', 'nombre', 'descripcion', 'precio', 'stock', 'marca', 'imagen', 'activo')
     template_name = 'tiendalibre/producto_form.html'
     success_url = reverse_lazy('tiendalibre:catalogo')
 
 
-class ProductoDeleteView(DeleteView):
+class ProductoDeleteView(LoginRequiredMixin, DeleteView):
     model = Producto
     template_name = 'tiendalibre/producto_confirm_delete.html'
     success_url = reverse_lazy('tiendalibre:catalogo')

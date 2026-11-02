@@ -21,6 +21,17 @@
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'tiendalibre:acerca-de-mi' %}">Acerca de mí</a></li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><span class="nav-link">Hola, {{ user.username }}</span></li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link">Cerrar sesión</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

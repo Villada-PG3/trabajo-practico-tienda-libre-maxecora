@@ -23,6 +23,7 @@ from tiendalibre.views import TiendaTemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('tienda/', TiendaTemplateView.as_view()),
     path('', include('tiendalibre.urls')),
 ]
